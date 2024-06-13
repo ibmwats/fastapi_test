@@ -1,0 +1,43 @@
+{% extends '/base.html' %}
+{% block title %}Список тематик сайтов{% endblock%}
+{% block h1 %}Список тематик сайтов{% endblock%}
+
+{% block body %}
+<div class="card-header">
+    <i class="fas fa-table me-1"></i>
+    Список тем
+</div>
+<div class="card-body">
+    <table id="datatablesSimple">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>Название темы</th>
+            <th>name_file_to_key</th>
+            <th>folder_to_pict</th>
+            <th>Количество сайтов</th>
+        </tr>
+        </thead>
+        <tfoot>
+        <tr>
+            <th>ID</th>
+            <th>Название темы</th>
+            <th>name_file_to_key</th>
+            <th>folder_to_pict</th>
+            <th>Количетсво сайтов</th>
+        </tr>
+        </tfoot>
+        <tbody>
+        {% for theme in themes %}
+        <tr>
+            <th>{{ theme.id }}</th>
+            <th>{{ theme.name }}</th>
+            <th>{{ theme.name_file_to_key }}</th>
+            <th>{{ theme.folder_to_pict }}</th>
+            <th>{{ theme.sites|length }}</th>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}
