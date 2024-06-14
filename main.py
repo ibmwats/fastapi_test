@@ -24,7 +24,7 @@ async def read_sites(request: Request, db: Session = Depends(get_db)):
 @app.get("/add-sites", response_class=HTMLResponse)
 async def add_sites(request: Request, db: Session = Depends(get_db)):
     themes = crud.get_themes(db)
-    return templates.TemplateResponse("add_sites.html", {"request": request, "themes": themes})
+    return templates.TemplateResponse("add_site_custom.html", {"request": request, "themes": themes})
 
 
 @app.get("/sites/{site_id}", response_class=HTMLResponse)
