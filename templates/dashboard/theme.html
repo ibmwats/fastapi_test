@@ -1,0 +1,59 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Список тем{% endblock %}
+{% block main %}
+<h2>Добавить новую тему:</h2>
+<form action="/themes" method="post">
+    <label for="name">Название темы:</label>
+    <input type="text" id="name" name="name" required>
+
+    <label for="file_key">Файл с ключами:</label>
+    <input type="text" id="file_key" name="name_file_to_key" required>
+
+    <label for="folder_pict">Папка с картинками:</label>
+    <input type="text" id="folder_pict" name="folder_to_pict" required>
+
+    <button type="submit">Добавить</button>
+</form>
+<h3>Таблица всех сайтов</h3>
+<table>
+    <thead>
+    <tr class="header">
+        <th>ID</th>
+        <th>Название темы</th>
+        <th>name_file_to_key</th>
+        <th>folder_to_pict</th>
+        <th>Количество сайтов</th>
+        <th>Действия</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for theme in themes %}
+    <tr>
+        <th>{{ theme.id }}</th>
+        <th>{{ theme.name }}</th>
+        <th>{{ theme.name_file_to_key }}</th>
+        <th>{{ theme.folder_to_pict }}</th>
+        <th>{{ theme.sites|length }}</th>
+        <th>
+            <form action="/themes/{{ theme.id }}/delete" method="POST">
+                <button class="btn-light" type="submit">Удалить</button>
+            </form>
+            <script>
+                function confirmDeletion(event) {
+                    if (!confirm("Вы действительно хотите удалить эту тему: {{ theme.name }}?")) {
+                        event.preventDefault(); // Отменить отправку формы, если пользователь нажал "Отмена"
+                    }
+                }
+
+                document.addEventListener('DOMContentLoaded', (event) => {
+                    const deleteForm = document.querySelector('form[action="/themes/{{ theme.id }}/delete"]');
+                    deleteForm.addEventListener('submit', confirmDeletion);
+                });
+            </script>
+        </th>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

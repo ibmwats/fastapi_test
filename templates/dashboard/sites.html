@@ -1,0 +1,85 @@
+{% extends 'dashboard/base.html' %}
+{% block title %}Список сайтов{% endblock %}
+{% block main %}
+<h2>Добавить новый сайт:</h2>
+<form action="/sites" method="post">
+    <label for="domain">Domain:</label>
+    <input type="text" id="domain" name="domain">
+
+    <label for="login">Login:</label>
+    <input type="text" id="login" name="login">
+
+    <label for="password">Password:</label>
+    <input type="text" id="password" name="password">
+
+    <label for="theme_id">Theme:</label>
+    <select id="theme_id" name="theme_id">
+        {% for theme in themes %}
+        <option value="{{ theme.id }}">{{ theme.name }}</option>
+        {% endfor %}
+    </select>
+
+    <button type="submit">Добавить</button>
+</form>
+<h3>Таблица всех сайтов</h3>
+<table>
+    <thead>
+    <tr class="header">
+        <th><b>ID</b></th>
+        <th><b>Domain</b></th>
+        <th><b>Login</b></th>
+        <th><b>Password</b></th>
+        <th><b>Theme</b></th>
+        <th><b>Last Post</b></th>
+        <th><b>Last Post Date</b></th>
+        <th><b>Count</b></th>
+        <th><b>Action</b></th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for site in sites %}
+    <tr>
+        <td>{{ site.id}}</td>
+        <td>{{ site.domain }}</td>
+        <td>{{ site.login }}</td>
+        <td>{{ site.password }}</td>
+        <td>{{ site.theme.name }}</td>
+        <td>
+            {% if site.posts and site.posts|length > 0 %}
+            {{ site.posts[-1].domain }}
+            {% else %}
+            No posts
+            {% endif %}
+        </td>
+        <td>
+            {% if site.posts and site.posts|length > 0 %}
+            {{ site.posts[-1].date_post }}
+            {% else %}
+            No posts
+            {% endif %}
+        </td>
+        <td>
+            {{ site.posts|length }}
+        </td>
+        <td>
+            <form action="/sites/{{ site.id }}/delete" method="POST">
+                <button class="btn-light" type="submit">Удалить</button>
+            </form>
+            <script>
+                function confirmDeletion(event) {
+                    if (!confirm("Вы действительно хотите удалить этот сайт: {{ site.domain }}?")) {
+                        event.preventDefault(); // Отменить отправку формы, если пользователь нажал "Отмена"
+                    }
+                }
+
+                document.addEventListener('DOMContentLoaded', (event) => {
+                    const deleteForm = document.querySelector('form[action="/sites/{{ site.id }}/delete"]');
+                    deleteForm.addEventListener('submit', confirmDeletion);
+                });
+            </script>
+        </td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
